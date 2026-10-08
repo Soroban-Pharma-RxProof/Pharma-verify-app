@@ -6,6 +6,8 @@ import { useWallet } from '../../context/WalletContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { BatchMetadata } from '../../types';
 import { ApiClient } from '../../lib/api-client';
+import DispenseModal from '../../components/pharmacy/DispenseModal';
+import PartialDispenseModal from '../../components/pharmacy/PartialDispenseModal';
 
 export default function PharmacyPage() {
   const { t } = useLanguage();
@@ -17,7 +19,7 @@ export default function PharmacyPage() {
 
   // Dispense modal states
   const [activeBatch, setActiveBatch] = useState<BatchMetadata | null>(null);
-  const [dispenseMode, setDispenseMode] = useState<'FULL' | 'PARTIAL'>('FULL');
+  const [dispenseMode, setDispenseMode] = useState<'FULL' | 'PARTIAL' | null>(null);
   const [serialInput, setSerialInput] = useState('');
   const [selectedStripIndex, setSelectedStripIndex] = useState<number>(0);
   const [isDispensing, setIsDispensing] = useState(false);
@@ -184,6 +186,32 @@ export default function PharmacyPage() {
           </div>
         ))}
       </div>
+
+      {/* Full Pack Dispense Modal */}
+      <DispenseModal
+        isOpen={dispenseMode === 'FULL'}
+        onClose={() => {
+          setDispenseMode(null);
+          setActiveBatch(null);
+        }}
+        batchId={activeBatch?.batchId}
+        onDispensed={(bId, serial, tx) => {
+          fetchInventory();
+        }}
+      />
+
+      {/* Partial Blister Strip Dispense Modal */}
+      <PartialDispenseModal
+        isOpen={dispenseMode === 'PARTIAL'}
+        onClose={() => {
+          setDispenseMode(null);
+          setActiveBatch(null);
+        }}
+        batch={activeBatch}
+        onDispensed={(bId, serial, strip, mask, tx) => {
+          fetchInventory();
+        }}
+      />
     </div>
   );
 }
