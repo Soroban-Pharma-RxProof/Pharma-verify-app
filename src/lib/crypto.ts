@@ -84,4 +84,31 @@ export class ClientCrypto {
 
     return current.toLowerCase() === rootHex.toLowerCase();
   }
+
+  /**
+   * Compute Merkle Root from an array of leaf hashes using sorted-pair SHA-256
+   */
+  public static async computeMerkleRoot(leaves: string[]): Promise<string> {
+    if (leaves.length === 0) {
+      return await this.sha256Hex('');
+    }
+
+    let currentLevel = leaves.map((l) => l.toLowerCase());
+
+    while (currentLevel.length > 1) {
+      const nextLevel: string[] = [];
+      for (let i = 0; i < currentLevel.length; i += 2) {
+        if (i + 1 < currentLevel.length) {
+          nextLevel.push(await this.hashSortedPair(currentLevel[i], currentLevel[i + 1]));
+        } else {
+          // Odd number of leaves: duplicate the last leaf
+          nextLevel.push(await this.hashSortedPair(currentLevel[i], currentLevel[i]));
+        }
+      }
+      currentLevel = nextLevel;
+    }
+
+    return currentLevel[0];
+  }
 }
+
