@@ -1,0 +1,17 @@
+{
+  "name": "Soroban Pharma RxProof",
+  "short_name": "RxProof",
+  "description": "Enterprise Counterfeit Medicine Verification & Supply Chain Provenance",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
