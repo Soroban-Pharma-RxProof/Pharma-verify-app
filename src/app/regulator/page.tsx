@@ -21,6 +21,9 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { AnomalyItem } from '../../types';
 import { ApiClient } from '../../lib/api-client';
 import { CONTRACT_ID } from '../../lib/contract';
+import ParticipantQueueModal from '../../components/regulator/ParticipantQueueModal';
+import RecallModal from '../../components/regulator/RecallModal';
+import MultisigModal from '../../components/regulator/MultisigModal';
 
 export default function RegulatorPage() {
   const { t } = useLanguage();
@@ -337,6 +340,25 @@ export default function RegulatorPage() {
           ))}
         </div>
       </div>
+
+      {/* Modals */}
+      <ParticipantQueueModal
+        isOpen={isParticipantModalOpen}
+        onClose={() => setIsParticipantModalOpen(false)}
+      />
+
+      <RecallModal
+        isOpen={isRecallModalOpen}
+        onClose={() => setIsRecallModalOpen(false)}
+        onBatchRecalled={() => {
+          fetchAnomalies();
+        }}
+      />
+
+      <MultisigModal
+        isOpen={isMultisigModalOpen}
+        onClose={() => setIsMultisigModalOpen(false)}
+      />
     </div>
   );
 }
