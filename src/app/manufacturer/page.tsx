@@ -21,6 +21,9 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { BatchMetadata } from '../../types';
 import { ApiClient } from '../../lib/api-client';
 import { CONTRACT_ID } from '../../lib/contract';
+import CreateBatchModal from '../../components/manufacturer/CreateBatchModal';
+import LabelsExportModal from '../../components/manufacturer/LabelsExportModal';
+import CustodyTransferModal from '../../components/manufacturer/CustodyTransferModal';
 
 export default function ManufacturerPage() {
   const { t } = useLanguage();
@@ -311,6 +314,30 @@ export default function ManufacturerPage() {
           ))}
         </div>
       </div>
+
+      {/* Modals */}
+      <CreateBatchModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onBatchCreated={(newBatch) => {
+          setBatches((prev) => [newBatch, ...prev]);
+        }}
+      />
+
+      <LabelsExportModal
+        isOpen={!!activeLabelBatch}
+        onClose={() => setActiveLabelBatch(null)}
+        batch={activeLabelBatch}
+      />
+
+      <CustodyTransferModal
+        isOpen={!!activeTransferBatch}
+        onClose={() => setActiveTransferBatch(null)}
+        batch={activeTransferBatch}
+        onTransferred={() => {
+          fetchBatches();
+        }}
+      />
     </div>
   );
 }
