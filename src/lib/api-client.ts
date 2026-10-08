@@ -109,4 +109,144 @@ export class ApiClient {
     if (!res.ok) throw new Error('Failed to resolve anomaly');
     return await res.json();
   }
+
+  /**
+   * Pharmacy: Dispense pack and burn serial on-chain
+   */
+  public static async dispensePack(payload: { batchId: string; serial: string; patientRef?: string }, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/pharmacy/dispense`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Dispense request failed');
+    }
+    return await res.json();
+  }
+
+  /**
+   * Pharmacy: Partial blister strip dispense
+   */
+  public static async dispensePartial(payload: { batchId: string; serial: string; stripIndex: number; unitsToDispense: number; bitmask?: number }, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/pharmacy/dispense-partial`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Partial dispense request failed');
+    }
+    return await res.json();
+  }
+
+  /**
+   * Custody: Transfer custody of batch
+   */
+  public static async transferCustody(payload: { batchId: string; toAddress: string; transferNotes?: string }, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/custody/transfer`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Custody transfer failed');
+    }
+    return await res.json();
+  }
+
+  /**
+   * Regulator: Recall batch
+   */
+  public static async recallBatch(payload: { batchId: string; reason: string }, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/regulator/recall`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Batch recall failed');
+    }
+    return await res.json();
+  }
+
+  /**
+   * Regulator: Emergency pause circuit breaker
+   */
+  public static async setEmergencyPause(paused: boolean, reason: string, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/regulator/emergency-pause`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ paused, reason }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Failed to update emergency pause');
+    }
+    return await res.json();
+  }
+
+  /**
+   * Regulator: Get participant onboarding review queue
+   */
+  public static async getParticipants(token?: string | null) {
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/regulator/participants`, { headers });
+    if (!res.ok) throw new Error('Failed to fetch participants');
+    return await res.json();
+  }
+
+  /**
+   * Regulator: Approve participant
+   */
+  public static async approveParticipant(address: string, role: string, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/regulator/participants/${address}/approve`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ role }),
+    });
+    if (!res.ok) throw new Error('Failed to approve participant');
+    return await res.json();
+  }
+
+  /**
+   * Regulator: Reject participant
+   */
+  public static async rejectParticipant(address: string, reason: string, token?: string | null) {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE_URL}/api/v1/regulator/participants/${address}/reject`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ reason }),
+    });
+    if (!res.ok) throw new Error('Failed to reject participant');
+    return await res.json();
+  }
 }
+
