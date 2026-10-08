@@ -2,6 +2,7 @@ export type VerificationStatus =
   | 'AUTHENTIC'
   | 'EXPIRED'
   | 'RECALLED'
+  | 'SUSPICIOUS'
   | 'SUSPICIOUS_CLONED'
   | 'SUSPICIOUS_UNKNOWN_BATCH'
   | 'SUSPICIOUS_INVALID_PROOF'
@@ -51,11 +52,25 @@ export interface CustodyTransition {
 
 export interface VerificationResult {
   status: VerificationStatus;
-  message: string;
+  message?: string;
+  batchId?: string;
+  serialNumber?: string;
+  productName?: string;
+  dosage?: string;
+  manufacturer?: string;
+  manufacturerAddress?: string;
+  expiryTimestamp?: number;
+  merkleProofVerified?: boolean;
+  isBurned?: boolean;
+  scanCount?: number;
+  totalStrips?: number;
+  unitsPerStrip?: number;
+  blisterBitmask?: number;
   batch?: BatchMetadata;
   pack?: PackDetails;
   custodyHistory?: CustodyTransition[];
   recallReason?: string;
+  suspiciousReason?: string;
   dispensedAt?: string | Date;
 }
 
@@ -79,11 +94,16 @@ export interface ScanHistoryItem {
 
 export interface AnomalyItem {
   id: string;
-  rule: string;
+  rule?: string;
+  type?: string;
   severity: string;
-  details: string;
+  details?: string;
+  description?: string;
   batchId?: string;
+  serial?: string;
   serialHash?: string;
+  location?: string;
   resolved: boolean;
-  createdAt: string;
+  createdAt?: string;
+  detectedAt?: string;
 }

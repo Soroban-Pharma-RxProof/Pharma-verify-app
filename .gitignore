@@ -39,3 +39,5 @@ Thumbs.db
 # Local cache
 .turbo/
 .vercel/
+*.tsbuildinfo
+package-lock.json
