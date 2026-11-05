@@ -95,6 +95,22 @@ export class OfflineStorage {
   }
 
   /**
+   * Clear all pending scans from offline queue
+   */
+  public static clearPendingQueue(): void {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEY_OFFLINE_QUEUE);
+    }
+  }
+
+  /**
+   * Return count of pending scans in offline queue
+   */
+  public static getPendingCount(): number {
+    return this.getPendingScans().length;
+  }
+
+  /**
    * Export scan history to CSV format
    */
   public static exportHistoryCsv(): string {
