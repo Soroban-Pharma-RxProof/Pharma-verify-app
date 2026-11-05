@@ -1,0 +1,55 @@
+name: Bug Report
+description: Create a report to help us improve RxProof App
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. @github-handle
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us what you expected to happen.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Open app at '...'
+        2. Click on '....'
+        3. Scan batch QR '....'
+        4. See error
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browser(s) are you seeing the problem on?
+      multiple: true
+      options:
+        - Chrome (Desktop / Android)
+        - Safari (macOS / iOS)
+        - Firefox
+        - Edge
+        - Standalone PWA installed
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Info
+      description: Node.js version, wallet extension version, device model.
+      placeholder: |
+        - OS: iOS 17.2 / Windows 11
+        - Wallet: Freighter v5.8.0
+        - Network: Soroban Testnet
