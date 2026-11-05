@@ -40,4 +40,3 @@ Thumbs.db
 .turbo/
 .vercel/
 *.tsbuildinfo
-package-lock.json
